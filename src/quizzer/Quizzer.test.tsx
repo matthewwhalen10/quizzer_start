@@ -21,28 +21,34 @@ const QUIZZES = sample.map(
 
 describe("Quizzer Tests", () => {
     beforeEach(() => {
+        // eslint-disable-next-line testing-library/no-render-in-setup
         render(<Quizzer />);
     });
     test("Users can add a new quiz", () => {
         const button = screen.getByText("Add New Quiz");
         expect(screen.queryByLabelText("Title: ")).not.toBeInTheDocument();
         button.click();
+        // eslint-disable-next-line testing-library/prefer-presence-queries
         expect(screen.queryByLabelText("Title:")).toBeInTheDocument();
         const saveButton = screen.getByText("Save Changes");
         saveButton.click();
+        // eslint-disable-next-line testing-library/prefer-presence-queries
         expect(screen.queryByText("Example Quiz")).toBeInTheDocument();
     });
 
     test("Users can see a list of quizzes, including the quizzes title, description, and how many questions it has", () => {
         for (let i = 0; i < QUIZZES.length; i++) {
+            // eslint-disable-next-line testing-library/prefer-presence-queries
             expect(screen.queryByText(QUIZZES[i].title)).toBeInTheDocument();
             expect(
+                // eslint-disable-next-line testing-library/prefer-presence-queries
                 screen.queryByText(
                     QUIZZES[i].questionList.length + " question",
                     { exact: false }
                 )
             ).toBeInTheDocument();
             expect(
+                // eslint-disable-next-line testing-library/prefer-presence-queries
                 screen.queryByText(QUIZZES[i].body, { exact: false })
             ).toBeInTheDocument();
         }
@@ -51,18 +57,24 @@ describe("Quizzer Tests", () => {
     test("Users can select a specific quiz to see the questions, including the questions name, body, and points", () => {
         const text = screen.getByText("Simple_Questions");
         text.click();
+        // eslint-disable-next-line testing-library/prefer-presence-queries
         expect(screen.queryByText("Exit")).toBeInTheDocument();
         expect(
+            // eslint-disable-next-line testing-library/prefer-presence-queries
             screen.queryByText("What is 2+2?", { exact: false })
         ).toBeInTheDocument();
         for (let i = 0; i < QUIZZES[1].questionList.length; i++) {
-            if (QUIZZES[1].questionList[i].published == true) {
+            if (QUIZZES[1].questionList[i].published === true) {
+                // eslint-disable-next-line jest/no-conditional-expect
                 expect(
+                    // eslint-disable-next-line testing-library/prefer-presence-queries
                     screen.queryByText(QUIZZES[1].questionList[i].body, {
                         exact: false
                     })
                 ).toBeInTheDocument();
+                // eslint-disable-next-line jest/no-conditional-expect
                 expect(
+                    // eslint-disable-next-line testing-library/prefer-presence-queries
                     screen.queryAllByText(
                         QUIZZES[1].questionList[i].points + " pt",
                         { exact: false }
@@ -75,8 +87,10 @@ describe("Quizzer Tests", () => {
     test("Users can enter or choose an answer for a quiz question, and be told if they are correct", () => {
         const text = screen.getByText("Simple_Questions");
         text.click();
+        // eslint-disable-next-line testing-library/prefer-presence-queries
         expect(screen.queryByText("Exit")).toBeInTheDocument();
         expect(
+            // eslint-disable-next-line testing-library/prefer-presence-queries
             screen.queryByText("What is 2+2?", { exact: false })
         ).toBeInTheDocument();
         const selectOption = screen.getAllByTestId("select-option")[0];
@@ -84,20 +98,24 @@ describe("Quizzer Tests", () => {
         userEvent.type(selectOption, "4");
         const submitButton = screen.getAllByText("Submit")[0];
         submitButton.click();
+        // eslint-disable-next-line testing-library/prefer-presence-queries
         expect(screen.queryByText("✔️")).toBeInTheDocument();
     });
 
     test("Users can see how many total points they have earned", () => {
         const text = screen.getByText("Simple_Questions");
         text.click();
+        // eslint-disable-next-line testing-library/prefer-presence-queries
         expect(screen.queryByText(/\d\/\d/)).toBeInTheDocument();
     });
 
     test("Users can clear out their existing answers for a quiz", () => {
         const text = screen.getByText("Simple_Questions");
         text.click();
+        // eslint-disable-next-line testing-library/prefer-presence-queries
         expect(screen.queryByText("Exit")).toBeInTheDocument();
         expect(
+            // eslint-disable-next-line testing-library/prefer-presence-queries
             screen.queryByText("What is 2+2?", { exact: false })
         ).toBeInTheDocument();
         const selectOption = screen.getAllByTestId("select-option")[0];
@@ -107,6 +125,7 @@ describe("Quizzer Tests", () => {
         expect(selectOption).toHaveValue("4");
         const submitButton = screen.getAllByText("Submit")[0];
         submitButton.click();
+        // eslint-disable-next-line testing-library/prefer-presence-queries
         expect(screen.queryByText("✔️")).toBeInTheDocument();
 
         const resetButton = screen.getByText("Reset"); // Click Reset button, the forum should have no value now and ✔️ should not be in the document.
@@ -131,6 +150,7 @@ describe("Quizzer Tests", () => {
         saveButton.click();
 
         expect(
+            // eslint-disable-next-line testing-library/prefer-presence-queries
             screen.queryByText(QUIZZES[1].questionList[3].body, {
                 exact: false
             })
@@ -151,6 +171,7 @@ describe("Quizzer Tests", () => {
         saveButton.click();
 
         expect(
+            // eslint-disable-next-line testing-library/prefer-presence-queries
             screen.queryByText(QUIZZES[1].questionList[1].body, {
                 exact: false
             })
@@ -194,6 +215,7 @@ describe("Quizzer Tests", () => {
         saveButton.click();
 
         expect(
+            // eslint-disable-next-line testing-library/prefer-presence-queries
             screen.queryByText("Example Question", { exact: false })
         ).toBeInTheDocument();
     });
@@ -225,7 +247,7 @@ describe("Quizzer Tests", () => {
         expect(afterOrder[1]).toHaveTextContent("What is 2+2?");
     });
 
-    test("Quiz questions can be of AT LEAST two types: a short answer question or multiple choice question ", () => {
+    test("Quiz questions can be of AT LEAST two types: a short answer question or multiple choice question", () => {
         const text = screen.getByText("Simple_Questions");
         text.click();
 
@@ -244,6 +266,7 @@ describe("Quizzer Tests", () => {
         saveButton.click();
 
         expect(
+            // eslint-disable-next-line testing-library/prefer-presence-queries
             screen.queryAllByText("Example Answer", {
                 exact: false
             })[0]
